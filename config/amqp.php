@@ -17,7 +17,7 @@ return [
             'connection_timeout'  => 3.0,
             'read_write_timeout'  => 3.0,
             'keepalive'           => false,
-            'heartbeat'           => 0,
+            'heartbeat'           => 0, -
             'exchange'            => 'amq.direct',
             'consumer_tag'        => 'consumer',
             'exchange_type'       => 'direct',

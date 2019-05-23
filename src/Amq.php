@@ -6,9 +6,18 @@ use Closure;
 
 class Amq
 {
+    protected $config;
+
+    public function __construct($config)
+    {
+        $this->config = $config;
+    }
+
 
     public function listen($key, Closure $callback)
     {
-        dd("listen mq");
+        $connect = Connection::connect($key, $this->config);
+        echo "dsdsd";
+        //
     }
 }

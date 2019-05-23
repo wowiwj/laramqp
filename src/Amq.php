@@ -13,15 +13,31 @@ class Amq
         $this->config = $config;
     }
 
-    public function listen($key, Closure $callback)
+    /**
+     * listen message
+     * @param $key
+     * @param Closure $callback
+     * @param array $options
+     * @author wangju 19-5-23 下午3:20
+     */
+    public function listen($key, Closure $callback, $options = [])
     {
-        $listener = new Listener($this->config, $key);
+        $listener = new Listener($this->config, $key, $options);
         $listener->listen($callback);
     }
 
-    public function add($key, $message)
+    /**
+     * add message
+     * @param $key
+     * @param $message
+     * @param array $options
+     * @return bool
+     * @throws \Exception
+     * @author wangju 19-5-23 下午3:20
+     */
+    public function add($key, $message, $options = [])
     {
-        $publisher = new Publisher($this->config, $key);
+        $publisher = new Publisher($this->config, $key, $options);
         return $publisher->add($message);
     }
 }

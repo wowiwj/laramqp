@@ -71,12 +71,13 @@ class Optionable
      */
     protected $options;
 
-    public function __construct($config, $key)
+    public function __construct($config, $key, $options = [])
     {
         $this->config = $config;
         $this->key = $key;
         $this->keyValue = Parser::getKeyValue($config, $key);
         list($this->connectionName, $this->exchangeName, $this->queueName) = Parser::parseKey($this->keyValue);
+        $this->initOpts($options);
     }
 
     /**

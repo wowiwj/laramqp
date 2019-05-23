@@ -14,9 +14,9 @@ class Connection extends Optionable
     protected $connection;
 
 
-    public function __construct($config, $key)
+    public function __construct($config, $key, $options)
     {
-        parent::__construct($config, $key);
+        parent::__construct($config, $key, $options);
         $this->AMQPConnect();
     }
 
@@ -27,9 +27,9 @@ class Connection extends Optionable
      * @return Connection
      * @author wangju 19-5-23 上午11:57
      */
-    public static function connect($config, $key)
+    public static function connect($config, $key, $options = [])
     {
-        return new self($config, $key);
+        return new self($config, $key, $options);
     }
 
     /**
@@ -50,6 +50,11 @@ class Connection extends Optionable
     }
 
 
+    /**
+     * get exchange by options
+     * @return \PhpAmqpLib\Channel\AMQPChannel
+     * @author wangju 19-5-23 下午3:18
+     */
     public function getChannel()
     {
         $channel = $this->connection->channel();

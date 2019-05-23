@@ -4,17 +4,16 @@
 namespace Laramqp;
 
 
-use PhpAmqpLib\Exchange\AMQPExchangeType;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class Publisher extends Optionable
 {
     protected $connection;
 
-    public function __construct($config, $key)
+    public function __construct($config, $key, $options = [])
     {
-        parent::__construct($config, $key);
-        $this->connection = Connection::connect($config, $key);
+        parent::__construct($config, $key, $options);
+        $this->connection = Connection::connect($config, $key, $options);
     }
 
     /**

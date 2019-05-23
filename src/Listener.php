@@ -13,10 +13,10 @@ class Listener extends Optionable
     protected $exchangeName;
     protected $queueName;
 
-    public function __construct($config, $key)
+    public function __construct($config, $key, $options = [])
     {
         parent::__construct($config, $key);
-        $this->connection = Connection::connect($config, $key);
+        $this->connection = Connection::connect($config, $key, $options);
     }
 
     public function listen(Closure $callback)

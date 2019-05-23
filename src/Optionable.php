@@ -14,15 +14,22 @@ class Optionable
         'vhost',
 
         'auto_bind', // auto bind queue and exchange
+        'consumer_tag',
 
         'queue_passive',
         'queue_durable',
         'queue_exclusive',
         'queue_auto_delete',
+
         'exchange_type',
         'exchange_passive',
         'exchange_durable',
-        'exchange_auto_delete'
+        'exchange_auto_delete',
+
+        'consumer_no_local',
+        'consumer_no_ack',
+        'consumer_exclusive',
+        'consumer_nowait',
     ];
 
     /**

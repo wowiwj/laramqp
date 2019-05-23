@@ -5,12 +5,10 @@ namespace Laramqp;
 
 
 use Closure;
-use PhpAmqpLib\Exchange\AMQPExchangeType;
 
 class Listener extends Optionable
 {
     protected $connection;
-
     protected $connectionName;
     protected $exchangeName;
     protected $queueName;
@@ -23,17 +21,16 @@ class Listener extends Optionable
 
     public function listen(Closure $callback)
     {
-        $connect = $this->connection->getConnect();
-
-
-
-        $channel = $connect->channel();
-
-        $channel->queue_declare($this->queueName, false, true, false, false);
-        $channel->exchange_declare($this->exchangeName, AMQPExchangeType::DIRECT, false, true, false);
-        $channel->queue_bind($this->queueName, $this->exchangeName);
-
-        $channel->basic_consume($this->queueName, 'test', false, false, false, false, $callback);
+        $channel = $this->connection->getChannel();
+        $channel->basic_consume(
+            $this->queueName,
+            $this->getOptions('consumer_tag', ''),
+            $this->getOptions('consumer_no_local', false),
+            $this->getOptions('consumer_no_ack', false),
+            $this->getOptions('consumer_exclusive', false),
+            $this->getOptions('consumer_nowait', false),
+            $callback
+        );
 
         while ($channel->is_consuming()) {
             $channel->wait();

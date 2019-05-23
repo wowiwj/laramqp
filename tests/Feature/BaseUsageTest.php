@@ -4,7 +4,6 @@ namespace Laramqp\Tests\Feature;
 
 use Laramqp\Amq;
 use Laramqp\Tests\TestCase;
-use PhpAmqpLib\Message\AMQPMessage;
 
 class BaseUsageTest extends TestCase
 {
@@ -23,8 +22,8 @@ class BaseUsageTest extends TestCase
         $config = require_once '../../config/amqp.php';
         $amq = new Amq($config);
 
-        $amq->listen('test_key', function (AMQPMessage $message) {
-            echo $message->getBody();
+        $amq->listen('test_key', function ($message) {
+            echo $message;
             return true;
         });
     }
@@ -38,12 +37,12 @@ class BaseUsageTest extends TestCase
         $config = require_once '../../config/amqp.php';
         $amq = new Amq($config);
 
-        $amq->add('test_key', [
+        $result = $amq->add('test_key', [
             'message' => 'sdsd',
             'name'    => 1213
         ], [
             'content_type' => "text/json"
         ]);
-        $this->assertTrue(true);
+        $this->assertTrue($result);
     }
 }

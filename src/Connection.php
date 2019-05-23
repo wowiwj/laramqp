@@ -8,15 +8,31 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 class Connection
 {
+    /**
+     * @var AMQPStreamConnection
+     */
     protected $connection;
+    protected $config;
 
-    public function __construct(AMQPStreamConnection $connection)
+    protected $connectionName;
+    protected $exchangeName;
+    protected $queueName;
+
+    public function __construct($config, $key)
     {
-        $this->connection = $connection;
+        $this->config = $config;
+        $this->connectByKey($key);
     }
 
-    public static function connect($config)
+    public static function connect($config, $key)
     {
+        return new self($config, $key);
+    }
+
+    public function connectByKey($key)
+    {
+        list($this->connectionName, $this->exchangeName, $this->queueName) = Parser::parseKey($key);
+        $config = $this->config['connections'][$this->connectionName];
         $connection = new AMQPStreamConnection(
             $config['host'],
             $config['port'],
@@ -24,7 +40,8 @@ class Connection
             $config['password'],
             $config['vhost']
         );
-        return new self($connection);
+        $this->connection = $connection;
+        return $this;
     }
 
     public function getConnect()

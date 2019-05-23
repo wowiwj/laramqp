@@ -13,11 +13,11 @@ class Amq
         $this->config = $config;
     }
 
-
     public function listen($key, Closure $callback)
     {
-        $connect = Connection::connect($this->config);
-        $listener = new Listener($connect, $key);
+        $keyValue = Parser::getKeyValue($this->config,$key);
+        $connect = Connection::connect($this->config,$keyValue);
+        $listener = new Listener($connect, $keyValue);
         $listener->listen($callback);
     }
 }

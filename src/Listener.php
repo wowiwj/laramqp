@@ -15,28 +15,19 @@ class Listener
     protected $exchangeName;
     protected $queueName;
 
-    public function __construct(Connection $connection, $key)
+    public function __construct(Connection $connection, $keyValue)
     {
         $this->connection = $connection;
-        $this->parseKey($key);
-    }
-
-    protected function parseKey($key)
-    {
-        $keyArr = explode('.', $key);
-        if (count($keyArr) != 3) {
-            new \Exception("parsed error by key: " . $key);
-        }
-        list($this->connectionName, $this->exchangeName, $this->queueName) = $keyArr;
+        list($this->connectionName, $this->exchangeName, $this->queueName) = Parser::parseKey($keyValue);
     }
 
     public function listen(Closure $callback)
     {
         $connect = $this->connection->getConnect();
-        $channel =$connect->channel();
+        $channel = $connect->channel();
         $channel->queue_declare($this->queueName, false, true, false, false);
         $channel->exchange_declare($this->exchangeName, AMQPExchangeType::DIRECT, false, true, false);
         $channel->queue_bind($this->queueName, $this->exchangeName);
-        $channel->basic_consume($this->queueName,'test');
+        $channel->basic_consume($this->queueName, 'test', false, false, false, false, $callback);
     }
 }

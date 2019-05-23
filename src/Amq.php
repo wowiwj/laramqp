@@ -22,7 +22,6 @@ class Amq
     public function add($key, $message)
     {
         $publisher = new Publisher($this->config, $key);
-        $publisher->add($message);
-        return true;
+        return $publisher->add($message);
     }
 }

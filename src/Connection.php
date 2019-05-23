@@ -40,13 +40,37 @@ class Connection extends Optionable
     public function AMQPConnect()
     {
         $connection = new AMQPStreamConnection(
-            $this->getOptions('host','localhost'),
-            $this->getOptions('port',5672),
-            $this->getOptions('username','guest'),
-            $this->getOptions('password','guest'),
-            $this->getOptions('vhost','/')
+            $this->getOptions('host', 'localhost'),
+            $this->getOptions('port', 5672),
+            $this->getOptions('username', 'guest'),
+            $this->getOptions('password', 'guest'),
+            $this->getOptions('vhost', '/')
         );
         $this->connection = $connection;
+    }
+
+
+    public function getChannel()
+    {
+        $channel = $this->connection->channel();
+        $channel->queue_declare(
+            $this->queueName,
+            $this->getOptions('queue_passive', false),
+            $this->getOptions('queue_durable', true),
+            $this->getOptions('queue_exclusive', false),
+            $this->getOptions('queue_auto_delete', false)
+        );
+        $channel->exchange_declare($this->exchangeName,
+            $this->getOptions('exchange_direct', 'direct'),
+            $this->getOptions('exchange_passive', false),
+            $this->getOptions('exchange_durable', true),
+            $this->getOptions('exchange_auto_delete', false)
+        );
+
+        if ($this->getOptions('auto_bind', true)) {
+            $channel->queue_bind($this->queueName, $this->exchangeName);
+        }
+        return $channel;
     }
 
     /**

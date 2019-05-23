@@ -24,10 +24,15 @@ class Listener extends Optionable
     public function listen(Closure $callback)
     {
         $connect = $this->connection->getConnect();
+
+
+
         $channel = $connect->channel();
+
         $channel->queue_declare($this->queueName, false, true, false, false);
         $channel->exchange_declare($this->exchangeName, AMQPExchangeType::DIRECT, false, true, false);
         $channel->queue_bind($this->queueName, $this->exchangeName);
+
         $channel->basic_consume($this->queueName, 'test', false, false, false, false, $callback);
 
         while ($channel->is_consuming()) {

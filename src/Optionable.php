@@ -12,6 +12,9 @@ class Optionable
         'username',
         'password',
         'vhost',
+
+        'auto_bind', // auto bind queue and exchange
+
         'queue_passive',
         'queue_durable',
         'queue_exclusive',

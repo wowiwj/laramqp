@@ -38,9 +38,11 @@ class BaseUsageTest extends TestCase
         $config = require_once '../../config/amqp.php';
         $amq = new Amq($config);
 
-        $amq->add('test_key',[
+        $amq->add('test_key', [
             'message' => 'sdsd',
-            'name' => 1213
+            'name'    => 1213
+        ], [
+            'content_type' => "text/json"
         ]);
         $this->assertTrue(true);
     }

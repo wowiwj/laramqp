@@ -96,7 +96,7 @@ class Optionable
 
         foreach ($this->allowOptions as $key) {
             if (array_key_exists($key, $options)) {
-                $this->options[$key] = $options['key'];
+                $this->options[$key] = $options[$key];
             }
         }
     }

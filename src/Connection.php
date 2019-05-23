@@ -15,7 +15,7 @@ class Connection
         $this->connection = $connection;
     }
 
-    public static function connect($key, $config)
+    public static function connect($config)
     {
         $connection = new AMQPStreamConnection(
             $config['host'],
@@ -24,8 +24,11 @@ class Connection
             $config['password'],
             $config['vhost']
         );
-        // parse exchange and queue
         return new self($connection);
     }
 
+    public function getConnect()
+    {
+        return $this->connection;
+    }
 }

@@ -16,8 +16,8 @@ class Amq
 
     public function listen($key, Closure $callback)
     {
-        $connect = Connection::connect($key, $this->config);
-        echo "dsdsd";
-        //
+        $connect = Connection::connect($this->config);
+        $listener = new Listener($connect, $key);
+        $listener->listen($callback);
     }
 }

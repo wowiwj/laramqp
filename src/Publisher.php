@@ -7,18 +7,15 @@ namespace Laramqp;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
 use PhpAmqpLib\Message\AMQPMessage;
 
-class Publisher
+class Publisher extends Optionable
 {
     protected $connection;
 
-    protected $connectionName;
-    protected $exchangeName;
-    protected $queueName;
 
-    public function __construct(Connection $connection, $keyValue)
+    public function __construct($config, $key)
     {
-        $this->connection = $connection;
-        list($this->connectionName, $this->exchangeName, $this->queueName) = Parser::parseKey($keyValue);
+        parent::__construct($config, $key);
+        $this->connection = Connection::connect($config, $key);
     }
 
     /**

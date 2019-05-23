@@ -6,20 +6,17 @@ namespace Laramqp;
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
-class Connection
+class Connection extends Optionable
 {
     /**
      * @var AMQPStreamConnection
      */
     protected $connection;
-    protected $config;
 
-    protected $connectionName;
-    protected $exchangeName;
-    protected $queueName;
 
     public function __construct($config, $key)
     {
+        parent::__construct($config, $key);
         $this->config = $config;
         $this->connectByKey($key);
     }
@@ -83,7 +80,8 @@ class Connection
      * @throws \Exception
      * @author wangju 19-5-23 下午1:36
      */
-    public function close(){
+    public function close()
+    {
         return $this->connection->close();
     }
 }

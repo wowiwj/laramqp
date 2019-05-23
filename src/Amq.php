@@ -15,19 +15,14 @@ class Amq
 
     public function listen($key, Closure $callback)
     {
-        $keyValue = Parser::getKeyValue($this->config, $key);
-        $connect = Connection::connect($this->config, $keyValue);
-        $listener = new Listener($connect, $keyValue);
+        $listener = new Listener($this->config, $key);
         $listener->listen($callback);
     }
 
     public function add($key, $message)
     {
-        $keyValue = Parser::getKeyValue($this->config, $key);
-        $connect = Connection::connect($this->config, $keyValue);
-        $publisher = new Publisher($connect, $keyValue);
+        $publisher = new Publisher($this->config, $key);
         $publisher->add($message);
         return true;
     }
-
 }

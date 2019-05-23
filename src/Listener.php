@@ -7,7 +7,7 @@ namespace Laramqp;
 use Closure;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
 
-class Listener
+class Listener extends Optionable
 {
     protected $connection;
 
@@ -15,10 +15,10 @@ class Listener
     protected $exchangeName;
     protected $queueName;
 
-    public function __construct(Connection $connection, $keyValue)
+    public function __construct($config, $key)
     {
-        $this->connection = $connection;
-        list($this->connectionName, $this->exchangeName, $this->queueName) = Parser::parseKey($keyValue);
+        parent::__construct($config, $key);
+        $this->connection = Connection::connect($config, $key);
     }
 
     public function listen(Closure $callback)
@@ -30,7 +30,7 @@ class Listener
         $channel->queue_bind($this->queueName, $this->exchangeName);
         $channel->basic_consume($this->queueName, 'test', false, false, false, false, $callback);
 
-        while ($channel ->is_consuming()) {
+        while ($channel->is_consuming()) {
             $channel->wait();
         }
     }

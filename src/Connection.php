@@ -17,8 +17,7 @@ class Connection extends Optionable
     public function __construct($config, $key)
     {
         parent::__construct($config, $key);
-        $this->config = $config;
-        $this->connectByKey($key);
+        $this->AMQPConnect();
     }
 
     /**
@@ -35,24 +34,19 @@ class Connection extends Optionable
 
     /**
      * connect mq by key
-     * @param $key
-     * @return $this
-     * @throws \Exception
+     * @return void
      * @author wangju 19-5-23 上午11:56
      */
-    public function connectByKey($key)
+    public function AMQPConnect()
     {
-        list($this->connectionName, $this->exchangeName, $this->queueName) = Parser::parseKey($key);
-        $config = $this->config['connections'][$this->connectionName];
         $connection = new AMQPStreamConnection(
-            $config['host'],
-            $config['port'],
-            $config['username'],
-            $config['password'],
-            $config['vhost']
+            $this->getOptions('host','localhost'),
+            $this->getOptions('port',5672),
+            $this->getOptions('username','guest'),
+            $this->getOptions('password','guest'),
+            $this->getOptions('vhost','/')
         );
         $this->connection = $connection;
-        return $this;
     }
 
     /**

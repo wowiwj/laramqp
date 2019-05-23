@@ -7,6 +7,11 @@ namespace Laramqp;
 class Optionable
 {
     protected $allowOptions = [
+        'host',
+        'port',
+        'username',
+        'password',
+        'vhost',
         'queue_passive',
         'queue_durable',
         'queue_exclusive',
@@ -63,6 +68,24 @@ class Optionable
 
     protected function initOpts($options)
     {
+        $connectConfig = $this->config['connections'];
+        if (empty($connectConfig)) {
+            throw new \Exception("empty connection set,please check you config");
+        }
+        $this->options = $connectConfig[$this->connectionName];
 
+        foreach ($this->allowOptions as $key) {
+            if (array_key_exists($key, $options)) {
+                $this->options[$key] = $options['key'];
+            }
+        }
+    }
+
+    protected function getOptions($key = null, $default = '')
+    {
+        if (empty($key)) {
+            return $this->options;
+        }
+        return $this->options[$key] ?? $default;
     }
 }

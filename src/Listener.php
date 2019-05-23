@@ -10,9 +10,6 @@ use PhpAmqpLib\Message\AMQPMessage;
 class Listener extends Optionable
 {
     protected $connection;
-    protected $connectionName;
-    protected $exchangeName;
-    protected $queueName;
 
     public function __construct($config, $key, $options = [])
     {

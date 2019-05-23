@@ -11,7 +11,6 @@ class Publisher extends Optionable
 {
     protected $connection;
 
-
     public function __construct($config, $key)
     {
         parent::__construct($config, $key);
@@ -27,16 +26,11 @@ class Publisher extends Optionable
      */
     public function add($message)
     {
-        $connect = $this->connection->getConnect();
-        $channel = $connect->channel();
-        $channel->queue_declare($this->queueName, false, true, false, false);
-        $channel->exchange_declare($this->exchangeName, AMQPExchangeType::DIRECT, false, true, false);
-        $channel->queue_bind($this->queueName, $this->exchangeName);
-
+        $channel = $this->connection->getChannel();
         $message = $this->convertMessage($message);
         $amqpMessage = new AMQPMessage($message, [
-            'content_type'  => 'text/plain',
-            'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT,
+            'content_type'  => $this->getOptions('content_type', 'text/plain'),
+            'delivery_mode' => $this->getOptions('delivery_mode', AMQPMessage::DELIVERY_MODE_PERSISTENT),
         ]);
         $channel->basic_publish($amqpMessage, $this->exchangeName);
         $channel->close();

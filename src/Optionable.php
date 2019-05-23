@@ -30,6 +30,9 @@ class Optionable
         'consumer_no_ack',
         'consumer_exclusive',
         'consumer_nowait',
+
+        'content_type',
+        'delivery_mode',
     ];
 
     /**

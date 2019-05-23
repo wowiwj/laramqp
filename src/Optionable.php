@@ -54,7 +54,7 @@ class Optionable
 
 
     /**
-     * @var $options array set options with user want
+     * @var $options array all options
      */
     protected $options;
 
@@ -66,6 +66,12 @@ class Optionable
         list($this->connectionName, $this->exchangeName, $this->queueName) = Parser::parseKey($this->keyValue);
     }
 
+    /**
+     * init options with user config
+     * @param $options
+     * @throws \Exception
+     * @author wangju 19-5-23 下午2:41
+     */
     protected function initOpts($options)
     {
         $connectConfig = $this->config['connections'];
@@ -81,6 +87,13 @@ class Optionable
         }
     }
 
+    /**
+     * get user options
+     * @param null $key
+     * @param string $default
+     * @return array|mixed|string
+     * @author wangju 19-5-23 下午2:42
+     */
     protected function getOptions($key = null, $default = '')
     {
         if (empty($key)) {

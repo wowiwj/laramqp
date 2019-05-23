@@ -5,6 +5,7 @@ namespace Laramqp;
 
 
 use Closure;
+use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
 
 class Listener
@@ -29,5 +30,12 @@ class Listener
         $channel->exchange_declare($this->exchangeName, AMQPExchangeType::DIRECT, false, true, false);
         $channel->queue_bind($this->queueName, $this->exchangeName);
         $channel->basic_consume($this->queueName, 'test', false, false, false, false, $callback);
+        $this->wait($channel);
+    }
+
+    public function wait(AMQPChannel $channel){
+        while ($channel ->is_consuming()) {
+            $channel->wait();
+        }
     }
 }

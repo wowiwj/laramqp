@@ -4,6 +4,7 @@ namespace Laramqp\Tests\Feature;
 
 use Laramqp\Amq;
 use Laramqp\Tests\TestCase;
+use PhpAmqpLib\Message\AMQPMessage;
 
 class BaseUsageTest extends TestCase
 {
@@ -17,8 +18,8 @@ class BaseUsageTest extends TestCase
         $config = require_once '../../config/amqp.php';
         $amq = new Amq($config);
 
-        $amq->listen('test_key', function () {
-            dump("listen in");
+        $amq->listen('test_key', function (AMQPMessage $message) {
+            print_r($message->getBody());
             return true;
         });
     }
